@@ -1,0 +1,18 @@
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+x=np.arange(-10,10,0.01)
+y=1/(1+np.power(np.e,-x))
+plt.plot(x,y)
+plt.show()
+y1=(np.power(np.e,-x))/(1+np.power(np.e,-x))
+plt.plot(x,y1)
+plt.show()
+line=3+4*x
+plt.plot(x,line)
+sig_y=1/(1+np.power(np.e,-line))
+sig_y1=np.power(np.e,line)/(1+np.power(np.e,line))
+plt.plot(x,sig_y)
+plt.plot(x,sig_y1)
+plt.show()

@@ -1,0 +1,53 @@
+''' Natural Language Processing '''
+import nltk
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+import re
+nltk.download('stopwords')
+from nltk.corpus import stopwords
+from nltk.stem.porter import PorterStemmer
+ps = PorterStemmer()
+
+dataset = pd.read_csv('train.csv')
+
+dataset['tweet'][0]
+
+processed_tweet = []
+
+for i in range(31962):
+    temp = re.sub('@[\w]*','',dataset['tweet'][i])
+    temp = re.sub('[^a-zA-Z#]',' ',temp)
+    temp = temp.lower()
+    temp = temp.split()
+    temp = [ps.stem(token) for token in temp if not token in set(stopwords.words('english'))]
+    temp = ' '.join(temp)
+    processed_tweet.append(temp)
+
+from sklearn.feature_extraction.text import CountVectorizer
+cv = CountVectorizer(max_features=3000)
+X = cv.fit_transform(processed_tweet)
+X = X.toarray()
+y = dataset['label'].values 
+print(cv.get_feature_names)
+
+from sklearn.naive_bayes import GaussianNB
+n_b = GaussianNB()
+
+
+from sklearn.model_selection import train_test_split
+X_train,X_test,y_train,y_test = train_test_split(X,y)
+n_b.fit(X_train,y_train)
+
+n_b.score(X_test,y_test)
+n_b.score(X_train,y_train)
+n_b.score(X,y)
+
+from sklearn.tree import DecisionTreeClassifier
+dtf=DecisionTreeClassifier()
+dtf.fit(X_train,y_train)
+
+
+dtf.score(X_train,y_train)
+dtf.score(X_test,y_test)
+dtf.score(X,y)
